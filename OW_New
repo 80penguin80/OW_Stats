@@ -1,0 +1,35 @@
+#import packages
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+ow = pd.read_excel('/Users/Owner/OneDrive/Desktop/OW Stats.xlsx')
+
+#SR change per game
+Games=range(ow.shape[0])
+ow['Game Num']= Games
+x = ow['Game Num']
+y = ow['SR After']
+plt.plot(x,y)
+plt.xlabel('Games')
+plt.ylabel('SR')
+plt.title('SR Per Game')
+
+#W/L/T per game type
+sns.countplot(x='Game Type', hue='W/L', data=ow)
+
+#cumavg SR 
+Games=range(ow.shape[0])
+ow['Game Num']= Games
+x = ow['Game Num']
+y = ow['SR After'].expanding().mean()
+plt.plot(x,y)
+plt.xlabel('Games')
+plt.ylabel('SR')
+plt.title('CumAvg SR Per Game')
+
+plt.hist(ow['Gain/Loss'], bins=5)
+
+#describing per map healing and dps per 10 min
+a=['Per 10min','DPS 10min']
+ow.groupby(["Map"])[a].agg([np.mean, np.std, np.min, np.max])
